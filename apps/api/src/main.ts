@@ -14,6 +14,9 @@ async function bootstrap() {
     process.loadEnvFile('.env');
   }
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // A tunnel (ngrok) on this machine forwards requests from localhost. Trust its
+  // X-Forwarded-For header only from loopback, so rate limits count each real caller.
+  app.set('trust proxy', 'loopback');
   configureApp(app);
   // Sample product pictures shipped with the code, and photos uploaded by the admin.
   app.useStaticAssets(resolve('public'), {

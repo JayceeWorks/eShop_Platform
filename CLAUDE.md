@@ -268,11 +268,15 @@ npm run start:dev
 npm test
 
 # Android installer (EAS Build, run in apps/mobile)
-npx eas-cli build --platform android --profile preview      # test APK
+npx eas-cli build --platform android --profile preview      # test APK, home Wi-Fi only
+npx eas-cli build --platform android --profile tunnel       # test APK, any network via ngrok
 npx eas-cli build --platform android --profile production   # Play Store bundle
+
+# public tunnel to the local API (repo root; needs ngrok + authtoken)
+npm run tunnel
 ```
 
-Builds (`apps/mobile/eas.json`): the `preview` profile makes an installable APK that calls the API on this PC (`http://192.168.1.4:3000`) and sets `ALLOW_HTTP_API=true`, which `app.config.js` uses to allow plain HTTP. All other builds stay HTTPS-only. Android package id: `com.simpleconcepts.shop` (permanent once on the Play Store). Bump `android.versionCode` in `app.json` for each Play Store upload. The `eas-build-post-install` script builds `packages/shared` on the build server.
+Builds (`apps/mobile/eas.json`): the `preview` profile makes an installable APK that calls the API on this PC (`http://192.168.1.4:3000`) and sets `ALLOW_HTTP_API=true`, which `app.config.js` uses to allow plain HTTP. The `tunnel` profile calls `https://implode-reload-acuteness.ngrok-free.dev/api/v1`, the owner's free static ngrok domain (chosen 2026-11-27), which forwards to the local API; testing and demos only. The API trusts `X-Forwarded-For` only from loopback (`trust proxy` in `main.ts`), so rate limits see each caller behind the tunnel. All builds other than `preview` stay HTTPS-only. Android package id: `com.simpleconcepts.shop` (permanent once on the Play Store). Bump `android.versionCode` in `app.json` for each Play Store upload. The `eas-build-post-install` script builds `packages/shared` on the build server.
 
 Environment variables (see `.env.example`): `DATABASE_URL`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `ADMIN_NAME`, `ADMIN_PHONE`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (first admin, created by the seed; changing them later does not reset an existing admin), `UPLOAD_DIR` (optional, default `uploads`), `OTP_PROVIDER_KEY`, `STORAGE_BUCKET`, `STORAGE_KEY`, `STORAGE_SECRET`, `ENABLED_PAYMENT_METHODS`, `EXPO_PUBLIC_API_BASE_URL` (mobile), `EXPO_PUBLIC_SHOP_PHONE` (mobile, optional: shows a "Call us" button on orders), and later `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`.
 
