@@ -122,7 +122,11 @@ If the PC's IP address changes, update `EXPO_PUBLIC_API_BASE_URL` in `apps/mobil
 
 ### Use the app on any network (ngrok tunnel)
 
-The **tunnel** APK connects to `https://implode-reload-acuteness.ngrok-free.dev`, a free ngrok address that forwards to the API on this PC. It works on any Wi-Fi or mobile data while this PC is on and runs two terminals:
+The **tunnel** APK connects to `https://implode-reload-acuteness.ngrok-free.dev`, a free ngrok address that forwards to the API on this PC. It works on any Wi-Fi or mobile data while this PC is on and runs the API and the tunnel.
+
+**Quick start:** double-click `start-server.cmd` in the project folder. It opens one window for the API and one for the tunnel, and skips any part that is already running. Close both windows to stop.
+
+Or start them yourself in two terminals:
 
 ```powershell
 # Terminal 1: the API
