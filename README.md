@@ -101,6 +101,47 @@ You should see the **Simple Concepts** home screen with products.
 
 Saved code changes appear on the phone automatically. Press `r` in Terminal 2 to reload the app, and `Ctrl+C` in a terminal to stop that server.
 
+## 5. Build an Android installer (APK)
+
+Expo's EAS Build service builds the APK online. You need a free account at [expo.dev](https://expo.dev).
+
+```powershell
+cd C:\dev\eShopApp\apps\mobile
+npx eas-cli login
+npx eas-cli build --platform android --profile preview
+```
+
+On the first build, answer **Yes** when it asks to create the EAS project and to generate a new Android keystore. The build takes about 10–20 minutes. When it finishes, the terminal shows a link and QR code. Open it on the phone, download the APK and install it. Android asks you to allow installs from your browser the first time.
+
+This **preview** APK connects to the API on this PC at `http://192.168.1.4:3000`, so it works only when:
+
+- the phone is on the same Wi-Fi, and
+- the API is running on this PC (Terminal 1 in step 3).
+
+If the PC's IP address changes, update `EXPO_PUBLIC_API_BASE_URL` in `apps/mobile/eas.json` and build again. For real customers, the API must first be hosted online with HTTPS; the `production` profile then builds the Play Store bundle.
+
+### Use the app on any network (ngrok tunnel)
+
+The **tunnel** APK connects to `https://implode-reload-acuteness.ngrok-free.dev`, a free ngrok address that forwards to the API on this PC. It works on any Wi-Fi or mobile data while this PC is on and runs the API and the tunnel.
+
+**Quick start:** double-click `start-server.cmd` in the project folder. It opens one window for the API and one for the tunnel, and skips any part that is already running. Close both windows to stop.
+
+Or start them yourself in two terminals:
+
+```powershell
+# Terminal 1: the API
+cd C:\dev\eShopApp\apps\api
+npm run start:dev
+
+# Terminal 2: the tunnel
+cd C:\dev\eShopApp
+npm run tunnel
+```
+
+Build the tunnel APK with `npx eas-cli build --platform android --profile tunnel` (in `apps/mobile`). The address never changes, so you only rebuild when the app itself changes.
+
+While the tunnel runs, anyone who knows the address can reach the API, and the OTP test code `123456` works for every number. Use it for testing and demos only, and stop it (`Ctrl+C`) when you are done. ngrok itself is set up once with `ngrok config add-authtoken <token>` from the ngrok dashboard.
+
 ## Troubleshooting
 
 ### Find your computer's IP address

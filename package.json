@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "npm run lint --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test": "npm test --workspaces --if-present"
+    "test": "npm test --workspaces --if-present",
+    "tunnel": "ngrok http --url=implode-reload-acuteness.ngrok-free.dev 3000"
   }
 }
