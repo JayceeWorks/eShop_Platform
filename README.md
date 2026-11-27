@@ -101,6 +101,25 @@ You should see the **Simple Concepts** home screen with products.
 
 Saved code changes appear on the phone automatically. Press `r` in Terminal 2 to reload the app, and `Ctrl+C` in a terminal to stop that server.
 
+## 5. Build an Android installer (APK)
+
+Expo's EAS Build service builds the APK online. You need a free account at [expo.dev](https://expo.dev).
+
+```powershell
+cd C:\dev\eShopApp\apps\mobile
+npx eas-cli login
+npx eas-cli build --platform android --profile preview
+```
+
+On the first build, answer **Yes** when it asks to create the EAS project and to generate a new Android keystore. The build takes about 10–20 minutes. When it finishes, the terminal shows a link and QR code. Open it on the phone, download the APK and install it. Android asks you to allow installs from your browser the first time.
+
+This **preview** APK connects to the API on this PC at `http://192.168.1.4:3000`, so it works only when:
+
+- the phone is on the same Wi-Fi, and
+- the API is running on this PC (Terminal 1 in step 3).
+
+If the PC's IP address changes, update `EXPO_PUBLIC_API_BASE_URL` in `apps/mobile/eas.json` and build again. For real customers, the API must first be hosted online with HTTPS; the `production` profile then builds the Play Store bundle.
+
 ## Troubleshooting
 
 ### Find your computer's IP address

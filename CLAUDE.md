@@ -266,7 +266,13 @@ npx prisma migrate dev    # apply DB migrations
 npx prisma db seed        # seed categories, sample products, first admin
 npm run start:dev
 npm test
+
+# Android installer (EAS Build, run in apps/mobile)
+npx eas-cli build --platform android --profile preview      # test APK
+npx eas-cli build --platform android --profile production   # Play Store bundle
 ```
+
+Builds (`apps/mobile/eas.json`): the `preview` profile makes an installable APK that calls the API on this PC (`http://192.168.1.4:3000`) and sets `ALLOW_HTTP_API=true`, which `app.config.js` uses to allow plain HTTP. All other builds stay HTTPS-only. Android package id: `com.simpleconcepts.shop` (permanent once on the Play Store). Bump `android.versionCode` in `app.json` for each Play Store upload. The `eas-build-post-install` script builds `packages/shared` on the build server.
 
 Environment variables (see `.env.example`): `DATABASE_URL`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `ADMIN_NAME`, `ADMIN_PHONE`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` (first admin, created by the seed; changing them later does not reset an existing admin), `UPLOAD_DIR` (optional, default `uploads`), `OTP_PROVIDER_KEY`, `STORAGE_BUCKET`, `STORAGE_KEY`, `STORAGE_SECRET`, `ENABLED_PAYMENT_METHODS`, `EXPO_PUBLIC_API_BASE_URL` (mobile), `EXPO_PUBLIC_SHOP_PHONE` (mobile, optional: shows a "Call us" button on orders), and later `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`.
 
